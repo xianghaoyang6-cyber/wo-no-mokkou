@@ -2,7 +2,7 @@
   "name": "強固點餐",
   "short_name": "強固點餐",
   "description": "強固點餐，黑金風格單機菜單點餐工具，可安裝、可離線使用。",
-  "start_url": "./index.html",
+  "start_url": "./index.html?v=112",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -11,17 +11,23 @@
   "lang": "zh-Hant-TW",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "icons/icon-192-v112.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "icons/icon-512-v112.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512-v112.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "id": "./index.html"
+  "id": "./qianggu-order-app-v112"
 }
