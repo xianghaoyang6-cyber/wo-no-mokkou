@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070604" />
+  <meta name="description" content="甲一飯包點菜，黑金風格單機點菜工具，可離線使用。" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="甲一點菜" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta property="og:title" content="甲一飯包點菜" />
+  <meta property="og:description" content="黑金風格單機點菜工具，可安裝、可離線使用。" />
+  <meta property="og:image" content="icons/icon-512.png" />
+  <title>強固自製菜單 v1.9 預設菜單版</title>
+  <style>
+    :root {
+      --bg: #070604;
+      --bg2: #11100c;
+      --card: rgba(22, 19, 13, 0.96);
+      --card2: rgba(31, 26, 16, 0.96);
+      --ink: #f7e7b4;
+      --ink-strong: #fff3c8;
+      --muted: #b69a5b;
+      --line: rgba(218, 181, 82, 0.26);
+      --line-strong: rgba(238, 204, 118, 0.42);
+      --soft: rgba(255, 224, 138, 0.07);
+      --primary: #d6ad45;
+      --primary-deep: #7a5517;
+      --danger: #ff8a80;
+      --danger-soft: rgba(126, 35, 28, 0.52);
+      --ok: #c7f2a2;
+      --ok-soft: rgba(58, 92, 39, 0.58);
+      --btn: rgba(255, 218, 122, 0.12);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+      --gold-gradient: linear-gradient(135deg, #fff1b8 0%, #d5aa3f 38%, #8c631d 100%);
+      --calligraphy-font: "BiauKai", "DFKai-SB", "Kaiti TC", "KaiTi", "STKaiti", "Songti TC", "Noto Serif CJK TC", "Noto Serif TC", cursive, serif;
+      --dark-gradient: linear-gradient(160deg, #1d180e 0%, #0d0b07 58%, #050403 100%);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(217, 178, 74, 0.18), transparent 32%),
+        radial-gradient(circle at 88% 12%, rgba(152, 106, 31, 0.15), transparent 30%),
+        linear-gradient(180deg, #0b0905 0%, #050403 100%);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 12px 10px 18px;
+    }
+
+    button, input, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--btn);
+      color: var(--ink-strong);
+      min-height: 40px;
+      padding: 8px 12px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+      box-shadow: inset 0 1px 0 rgba(255, 239, 184, 0.08);
+    }
+
+    button:active { transform: translateY(1px); }
+
+    input, textarea {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(7, 6, 4, 0.74);
+      color: var(--ink-strong);
+      outline: none;
+      caret-color: #ffd978;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: rgba(214, 178, 92, 0.48);
+    }
+
+    input:focus, textarea:focus {
+      border-color: #e4bf65;
+      box-shadow: 0 0 0 3px rgba(214, 173, 69, 0.18);
+    }
+
+    .app {
+      width: min(100%, 460px);
+      margin: 0 auto;
+    }
+
+    .top-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--dark-gradient);
+      color: var(--ink-strong);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      padding: 14px 14px 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .top-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(255,255,255,0.10), transparent 24%, transparent 76%, rgba(255,213,105,0.08)),
+        repeating-linear-gradient(135deg, rgba(255, 219, 124, 0.045) 0, rgba(255, 219, 124, 0.045) 1px, transparent 1px, transparent 12px);
+      pointer-events: none;
+    }
+
+    .top-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .title-actions {
+      display: grid;
+      justify-items: end;
+      gap: 4px;
+      flex: 0 0 auto;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.2;
+      letter-spacing: 0.04em;
+      color: #ffe9a6;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.55);
+    }
+
+    .shop-name {
+      max-width: 132px;
+      padding: 4px 8px;
+      border: 1px solid rgba(238, 204, 118, 0.40);
+      border-radius: 999px;
+      background: rgba(255, 224, 138, 0.10);
+      color: #fff1bd;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .edit-shop-btn {
+      min-height: 30px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      background: rgba(255, 218, 122, 0.13);
+      color: #ffe7a0;
+      border-color: rgba(238, 204, 118, 0.34);
+    }
+
+    .version {
+      font-size: 12px;
+      color: rgba(255, 234, 174, 0.72);
+      white-space: nowrap;
+    }
+
+    .subtitle {
+      margin-top: 5px;
+      font-size: 13px;
+      color: rgba(255, 234, 174, 0.72);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .toolbar button {
+      background: linear-gradient(180deg, rgba(255, 228, 152, 0.16), rgba(136, 94, 26, 0.20));
+      border-color: var(--line-strong);
+      box-shadow: var(--shadow);
+      font-weight: 800;
+    }
+
+    .toolbar .setting-on {
+      background: var(--gold-gradient);
+      color: #1b1306;
+      border-color: rgba(255, 238, 177, 0.68);
+    }
+
+    .list-card,
+    .backup-card,
+    .note-card,
+    .total-card,
+    .modal-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-row,
+    .item-row,
+    .edit-row {
+      display: grid;
+      align-items: center;
+      column-gap: 6px;
+    }
+
+    .header-row {
+      grid-template-columns: minmax(0, 1fr) 48px 112px;
+      padding: 9px 10px;
+      background: var(--soft);
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .item-row {
+      grid-template-columns: minmax(0, 1fr) 48px 112px;
+      min-height: 48px;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .item-row:nth-child(even) {
+      background: rgba(255, 216, 117, 0.035);
+    }
+
+    .item-row:last-child,
+    .edit-row:last-child {
+      border-bottom: 0;
+    }
+
+    .name {
+      font-family: var(--calligraphy-font);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+      color: #fff4c9;
+      text-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.72),
+        0 0 9px rgba(214, 173, 69, 0.16);
+    }
+
+    .edit-name,
+    #newName {
+      font-family: var(--calligraphy-font);
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+
+    .price {
+      text-align: right;
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+      color: #ffd778;
+      padding-right: 2px;
+      font-weight: 800;
+    }
+
+    .qty-control {
+      display: grid;
+      grid-template-columns: 34px 36px 34px;
+      align-items: center;
+      justify-content: end;
+      gap: 4px;
+    }
+
+    .qty-btn {
+      width: 34px;
+      min-height: 36px;
+      padding: 0;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #f6d87b, #a87520);
+      border: 1px solid rgba(255, 238, 178, 0.34);
+      color: #1b1306;
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.34);
+    }
+
+    .qty-num {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: #fff0bb;
+    }
+
+    .empty {
+      padding: 22px 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .edit-row {
+      grid-template-columns: minmax(0, 1fr) 58px 58px;
+      min-height: 52px;
+      padding: 7px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .edit-row input {
+      width: 100%;
+      height: 38px;
+      padding: 6px 8px;
+      font-size: 15px;
+    }
+
+    .edit-price {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .delete-btn {
+      min-height: 38px;
+      padding: 6px 8px;
+      background: var(--danger-soft);
+      color: #ffd2cd;
+      border-color: rgba(255, 138, 128, 0.38);
+      font-weight: 900;
+      border-radius: 10px;
+    }
+
+    .backup-card {
+      margin-top: 10px;
+      padding: 10px;
+    }
+
+    .backup-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .backup-btn {
+      font-weight: 900;
+      background: linear-gradient(180deg, rgba(255, 228, 152, 0.14), rgba(136, 94, 26, 0.24));
+      border-color: rgba(238, 204, 118, 0.34);
+    }
+
+    .read-backup-btn {
+      background: linear-gradient(180deg, rgba(199, 242, 162, 0.13), rgba(58, 92, 39, 0.42));
+      color: #eaffd8;
+      border-color: rgba(199, 242, 162, 0.28);
+    }
+
+    .hidden-file-input {
+      display: none;
+    }
+
+    .note-card {
+      margin-top: 10px;
+      padding: 10px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 900;
+      color: #ffe7a0;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 74px;
+      resize: vertical;
+      padding: 9px 10px;
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .total-card {
+      margin-top: 10px;
+      padding: 12px 12px 14px;
+    }
+
+    .total-line {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 10px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .total-metric {
+      min-width: 0;
+      padding: 8px 9px;
+      border: 1px solid rgba(218, 181, 82, 0.18);
+      border-radius: 12px;
+      background: rgba(255, 224, 138, 0.055);
+    }
+
+    .total-metric.amount-metric {
+      text-align: right;
+    }
+
+    .total-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .total-value {
+      margin-top: 2px;
+      font-size: 24px;
+      font-weight: 950;
+      font-variant-numeric: tabular-nums;
+      color: #ffe39a;
+      text-shadow: 0 0 14px rgba(214, 173, 69, 0.16);
+      white-space: nowrap;
+    }
+
+    .total-value.qty-total {
+      color: #fff0bb;
+    }
+
+    .selected-summary {
+      margin-top: 10px;
+      padding: 9px 10px 10px;
+      border: 1px solid rgba(218, 181, 82, 0.18);
+      border-radius: 12px;
+      background: rgba(255, 224, 138, 0.045);
+    }
+
+    .selected-summary-title {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+
+    .selected-summary-list {
+      margin-top: 5px;
+      color: #fff0bb;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.6;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    .selected-summary-list.empty {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .status {
+      margin-top: 8px;
+      min-height: 18px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .bottom-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .save-btn {
+      background: linear-gradient(180deg, rgba(199, 242, 162, 0.18), rgba(58, 92, 39, 0.62));
+      color: #e5ffd0;
+      border-color: rgba(199, 242, 162, 0.34);
+      font-weight: 900;
+    }
+
+    .reset-btn {
+      background: linear-gradient(180deg, rgba(255, 138, 128, 0.16), rgba(126, 35, 28, 0.62));
+      color: #ffd7d2;
+      border-color: rgba(255, 138, 128, 0.38);
+      font-weight: 900;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.68);
+      padding: 16px;
+      z-index: 30;
+    }
+
+    .modal-backdrop.show { display: flex; }
+
+    .modal-card {
+      width: min(100%, 420px);
+      padding: 14px;
+      animation: pop 120ms ease-out;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.98); opacity: 0.75; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: #ffe7a0;
+    }
+
+    .field {
+      margin-top: 10px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+      font-weight: 900;
+      color: #d9bd78;
+    }
+
+    .field input {
+      width: 100%;
+      height: 42px;
+      padding: 8px 10px;
+      font-size: 16px;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .primary-btn {
+      background: var(--gold-gradient);
+      color: #1b1306;
+      border-color: rgba(255, 238, 177, 0.68);
+      font-weight: 950;
+    }
+
+    .cancel-btn {
+      background: rgba(255, 218, 122, 0.11);
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .message {
+      min-height: 20px;
+      margin-top: 8px;
+      color: #ffaaa2;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .confirm-text {
+      color: var(--ink);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .confirm-text strong { color: #ffaaa2; }
+
+    @media (max-width: 350px) {
+      body { padding-left: 6px; padding-right: 6px; }
+      .title-row { align-items: flex-start; }
+      h1 { font-size: 19px; }
+      .shop-name { max-width: 112px; font-size: 13px; }
+      .edit-shop-btn { min-height: 28px; padding: 3px 7px; }
+      .header-row, .item-row { grid-template-columns: minmax(0, 1fr) 42px 104px; }
+      .qty-control { grid-template-columns: 32px 32px 32px; gap: 4px; }
+      .qty-btn { width: 32px; }
+      .name { font-size: 16px; letter-spacing: 0.01em; }
+      .price { font-size: 14px; }
+      .backup-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="top-card" aria-label="應用標題">
+      <div class="title-row">
+        <div class="brand-group">
+          <h1>強固自製菜單</h1>
+          <div id="shopNameText" class="shop-name" title="店名">甲一飯包</div>
+        </div>
+        <div class="title-actions">
+          <button id="editShopBtn" class="edit-shop-btn" type="button">編輯店名</button>
+          <div class="version">v1.9 預設菜單版</div>
+        </div>
+      </div>
+      <div class="subtitle">店名可編輯｜已選合計｜預設甲一菜單｜資料只存在本機</div>
+    </section>
+
+    <section class="toolbar" aria-label="工具列">
+      <button id="addBtn" type="button">＋新增品項</button>
+      <button id="settingBtn" type="button">設定</button>
+    </section>
+
+    <section class="list-card" aria-label="品項清單">
+      <div id="listHeader" class="header-row">
+        <div>品名</div>
+        <div style="text-align:right;">價格</div>
+        <div style="text-align:center;">數量</div>
+      </div>
+      <div id="listBody"></div>
+    </section>
+
+    <section class="note-card" aria-label="備註">
+      <div class="section-title">
+        <span>備註</span>
+        <span class="hint">輸入後自動儲存</span>
+      </div>
+      <textarea id="noteInput" placeholder="例如：飯少、不要辣、其中 1 個不要配菜"></textarea>
+    </section>
+
+    <section class="total-card" aria-label="合計">
+      <div class="total-line">
+        <div class="total-metric">
+          <div class="total-label">總數量</div>
+          <div class="total-value qty-total"><span id="totalQty">0</span> 個</div>
+        </div>
+        <div class="total-metric amount-metric">
+          <div class="total-label">合計</div>
+          <div class="total-value"><span id="totalAmount">0</span> 元</div>
+        </div>
+      </div>
+      <div class="selected-summary" aria-label="已選品項">
+        <div class="selected-summary-title">已選品項</div>
+        <div id="selectedSummary" class="selected-summary-list empty">尚未選擇品項</div>
+      </div>
+      <div id="saveStatus" class="status">尚未儲存</div>
+      <div class="bottom-actions">
+        <button id="saveBtn" class="save-btn" type="button">儲存目前數量</button>
+        <button id="resetBtn" class="reset-btn" type="button">數量全部歸零</button>
+      </div>
+    </section>
+
+    <section class="backup-card" aria-label="品項備份">
+      <div class="section-title">
+        <span>品項備份</span>
+        <span class="hint">備份店名、品名、價格｜讀取後數量歸零</span>
+      </div>
+      <div class="backup-actions">
+        <button id="exportMenuBtn" class="backup-btn" type="button">匯出品項備份</button>
+        <button id="importMenuBtn" class="backup-btn read-backup-btn" type="button">讀取品項備份</button>
+      </div>
+      <input id="importFile" class="hidden-file-input" type="file" accept=".json,application/json" />
+    </section>
+
+  </main>
+
+  <div id="itemModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="itemModalTitle">
+    <div class="modal-card">
+      <h2 id="itemModalTitle">新增品項</h2>
+      <div class="field">
+        <label for="newName">品名，最多 7 字</label>
+        <input id="newName" maxlength="7" autocomplete="off" placeholder="炸雞腿飯" />
+      </div>
+      <div class="field">
+        <label for="newPrice">價格，1～999</label>
+        <input id="newPrice" inputmode="numeric" autocomplete="off" placeholder="130" />
+      </div>
+      <div class="field">
+        <label for="newQty">初始數量，0～99</label>
+        <input id="newQty" inputmode="numeric" autocomplete="off" placeholder="0" value="0" />
+      </div>
+      <div id="itemMsg" class="message"></div>
+      <div class="modal-actions">
+        <button id="cancelAddBtn" class="cancel-btn" type="button">取消</button>
+        <button id="confirmAddBtn" class="primary-btn" type="button">新增</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="shopModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="shopModalTitle">
+    <div class="modal-card">
+      <h2 id="shopModalTitle">編輯店名</h2>
+      <div class="field">
+        <label for="shopNameInput">店名，最多 12 字</label>
+        <input id="shopNameInput" maxlength="12" autocomplete="off" placeholder="甲一飯包" />
+      </div>
+      <div id="shopMsg" class="message"></div>
+      <div class="modal-actions">
+        <button id="cancelShopBtn" class="cancel-btn" type="button">取消</button>
+        <button id="confirmShopBtn" class="primary-btn" type="button">儲存店名</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resetModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+    <div class="modal-card">
+      <h2 id="resetModalTitle">確認歸零</h2>
+      <div class="confirm-text">
+        確定要把今天數量全部歸零？<br />
+        此動作會把 <strong>所有數量改成 0</strong>，並且 <strong>清空備註</strong>。
+      </div>
+      <div class="modal-actions">
+        <button id="cancelResetBtn" class="cancel-btn" type="button">取消</button>
+        <button id="confirmResetBtn" class="reset-btn" type="button">確定歸零</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const STORAGE_KEY = 'simple-order-app-v1-data';
+      const DEFAULT_DATA = {
+        storeName: '甲一飯包',
+        items: [
+          { id: makeId(), name: '炸雞腿飯', price: 130, qty: 0 },
+          { id: makeId(), name: '香雞排飯', price: 110, qty: 0 },
+          { id: makeId(), name: '挪威鯖魚飯', price: 130, qty: 0 },
+          { id: makeId(), name: '黑胡椒牛柳飯', price: 110, qty: 0 },
+          { id: makeId(), name: '菲力豬排飯', price: 105, qty: 0 },
+          { id: makeId(), name: '塔香無骨雞排飯', price: 105, qty: 0 },
+          { id: makeId(), name: '爌肉飯', price: 100, qty: 0 },
+          { id: makeId(), name: '法式豬排飯', price: 100, qty: 0 },
+          { id: makeId(), name: '叉燒飯', price: 95, qty: 0 },
+          { id: makeId(), name: '養生飯', price: 95, qty: 0 },
+          { id: makeId(), name: '炸排骨飯', price: 95, qty: 0 },
+          { id: makeId(), name: '蒲燒魚飯', price: 95, qty: 0 },
+          { id: makeId(), name: '鐵路排骨飯', price: 95, qty: 0 },
+          { id: makeId(), name: '招牌飯', price: 90, qty: 0 },
+          { id: makeId(), name: '滷棒腿飯', price: 90, qty: 0 },
+          { id: makeId(), name: '薄鹽鯖魚飯', price: 100, qty: 0 },
+          { id: makeId(), name: '香腸飯', price: 85, qty: 0 },
+          { id: makeId(), name: '原味卡啦雞飯', price: 85, qty: 0 },
+          { id: makeId(), name: '辣味卡啦雞飯', price: 85, qty: 0 }
+        ],
+        note: '',
+        lastSavedAt: ''
+      };
+
+      let state = loadState();
+      let settingMode = false;
+
+      const els = {
+        shopNameText: document.getElementById('shopNameText'),
+        editShopBtn: document.getElementById('editShopBtn'),
+        addBtn: document.getElementById('addBtn'),
+        settingBtn: document.getElementById('settingBtn'),
+        exportMenuBtn: document.getElementById('exportMenuBtn'),
+        importMenuBtn: document.getElementById('importMenuBtn'),
+        importFile: document.getElementById('importFile'),
+        listHeader: document.getElementById('listHeader'),
+        listBody: document.getElementById('listBody'),
+        noteInput: document.getElementById('noteInput'),
+        totalQty: document.getElementById('totalQty'),
+        totalAmount: document.getElementById('totalAmount'),
+        selectedSummary: document.getElementById('selectedSummary'),
+        saveStatus: document.getElementById('saveStatus'),
+        saveBtn: document.getElementById('saveBtn'),
+        resetBtn: document.getElementById('resetBtn'),
+        itemModal: document.getElementById('itemModal'),
+        newName: document.getElementById('newName'),
+        newPrice: document.getElementById('newPrice'),
+        newQty: document.getElementById('newQty'),
+        itemMsg: document.getElementById('itemMsg'),
+        cancelAddBtn: document.getElementById('cancelAddBtn'),
+        confirmAddBtn: document.getElementById('confirmAddBtn'),
+        shopModal: document.getElementById('shopModal'),
+        shopNameInput: document.getElementById('shopNameInput'),
+        shopMsg: document.getElementById('shopMsg'),
+        cancelShopBtn: document.getElementById('cancelShopBtn'),
+        confirmShopBtn: document.getElementById('confirmShopBtn'),
+        resetModal: document.getElementById('resetModal'),
+        cancelResetBtn: document.getElementById('cancelResetBtn'),
+        confirmResetBtn: document.getElementById('confirmResetBtn')
+      };
+
+      els.editShopBtn.addEventListener('click', openShopModal);
+      els.addBtn.addEventListener('click', openAddModal);
+      els.settingBtn.addEventListener('click', toggleSettingMode);
+      els.exportMenuBtn.addEventListener('click', exportMenuBackup);
+      els.importMenuBtn.addEventListener('click', openImportMenuBackup);
+      els.importFile.addEventListener('change', importMenuBackup);
+      els.noteInput.addEventListener('input', function () {
+        state.note = els.noteInput.value;
+        autoSave('備註已自動儲存');
+      });
+      els.saveBtn.addEventListener('click', function () {
+        manualSave('已手動儲存 ' + timeText());
+      });
+      els.resetBtn.addEventListener('click', function () {
+        els.resetModal.classList.add('show');
+      });
+      els.cancelResetBtn.addEventListener('click', closeResetModal);
+      els.confirmResetBtn.addEventListener('click', resetAllQty);
+      els.cancelAddBtn.addEventListener('click', closeAddModal);
+      els.confirmAddBtn.addEventListener('click', addItem);
+      els.cancelShopBtn.addEventListener('click', closeShopModal);
+      els.confirmShopBtn.addEventListener('click', saveShopName);
+
+      els.itemModal.addEventListener('click', function (event) {
+        if (event.target === els.itemModal) closeAddModal();
+      });
+      els.shopModal.addEventListener('click', function (event) {
+        if (event.target === els.shopModal) closeShopModal();
+      });
+      els.resetModal.addEventListener('click', function (event) {
+        if (event.target === els.resetModal) closeResetModal();
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          closeAddModal();
+          closeShopModal();
+          closeResetModal();
+        }
+      });
+
+      render();
+
+      function makeId() {
+        return 'item-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return structuredCloneSafe(DEFAULT_DATA);
+          const parsed = JSON.parse(raw);
+          const items = Array.isArray(parsed.items) ? parsed.items : [];
+          return {
+            storeName: normalizeStoreName(parsed.storeName),
+            items: items.map(normalizeItem).filter(Boolean),
+            note: typeof parsed.note === 'string' ? parsed.note : '',
+            lastSavedAt: typeof parsed.lastSavedAt === 'string' ? parsed.lastSavedAt : ''
+          };
+        } catch (error) {
+          return structuredCloneSafe(DEFAULT_DATA);
+        }
+      }
+
+      function structuredCloneSafe(value) {
+        return JSON.parse(JSON.stringify(value));
+      }
+
+      function normalizeStoreName(value) {
+        const name = typeof value === 'string' ? value.trim().slice(0, 12) : '';
+        return name || DEFAULT_DATA.storeName;
+      }
+
+      function normalizeItem(item) {
+        if (!item || typeof item !== 'object') return null;
+        const name = String(item.name || '').trim().slice(0, 7);
+        const price = clampNumber(item.price, 1, 999, 1);
+        const qty = clampNumber(item.qty, 0, 99, 0);
+        if (!name) return null;
+        return {
+          id: item.id || makeId(),
+          name,
+          price,
+          qty
+        };
+      }
+
+      function clampNumber(value, min, max, fallback) {
+        const num = Number.parseInt(String(value).replace(/[^0-9]/g, ''), 10);
+        if (!Number.isFinite(num)) return fallback;
+        return Math.max(min, Math.min(max, num));
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function autoSave(message) {
+        saveState();
+        renderTotal();
+        setStatus(message || '已自動儲存');
+      }
+
+      function manualSave(message) {
+        state.lastSavedAt = new Date().toISOString();
+        saveState();
+        render();
+        setStatus(message || '已手動儲存');
+      }
+
+      function setStatus(message) {
+        els.saveStatus.textContent = message;
+      }
+
+      function timeText() {
+        const now = new Date();
+        return String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+      }
+
+      function render() {
+        els.shopNameText.textContent = state.storeName || DEFAULT_DATA.storeName;
+        els.noteInput.value = state.note;
+        els.settingBtn.textContent = settingMode ? '完成' : '設定';
+        els.settingBtn.classList.toggle('setting-on', settingMode);
+        els.listHeader.innerHTML = settingMode
+          ? '<div>品名</div><div style="text-align:right;">價格</div><div style="text-align:center;">操作</div>'
+          : '<div>品名</div><div style="text-align:right;">價格</div><div style="text-align:center;">數量</div>';
+
+        renderList();
+        renderTotal();
+
+        if (state.lastSavedAt) {
+          const saved = new Date(state.lastSavedAt);
+          if (!Number.isNaN(saved.getTime())) {
+            els.saveStatus.textContent = '上次手動儲存：' + String(saved.getHours()).padStart(2, '0') + ':' + String(saved.getMinutes()).padStart(2, '0');
+          }
+        }
+      }
+
+      function renderList() {
+        els.listBody.innerHTML = '';
+
+        if (state.items.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'empty';
+          empty.textContent = '目前沒有品項，請按「＋新增品項」。';
+          els.listBody.appendChild(empty);
+          return;
+        }
+
+        state.items.forEach(function (item) {
+          els.listBody.appendChild(settingMode ? createEditRow(item) : createItemRow(item));
+        });
+      }
+
+      function createItemRow(item) {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+
+        const name = document.createElement('div');
+        name.className = 'name';
+        name.textContent = item.name;
+
+        const price = document.createElement('div');
+        price.className = 'price';
+        price.textContent = String(item.price);
+
+        const control = document.createElement('div');
+        control.className = 'qty-control';
+
+        const minus = document.createElement('button');
+        minus.className = 'qty-btn';
+        minus.type = 'button';
+        minus.textContent = '－';
+        minus.setAttribute('aria-label', item.name + ' 減少數量');
+        minus.addEventListener('click', function () {
+          changeQty(item.id, -1);
+        });
+
+        const qty = document.createElement('div');
+        qty.className = 'qty-num';
+        qty.textContent = String(item.qty);
+
+        const plus = document.createElement('button');
+        plus.className = 'qty-btn';
+        plus.type = 'button';
+        plus.textContent = '＋';
+        plus.setAttribute('aria-label', item.name + ' 增加數量');
+        plus.addEventListener('click', function () {
+          changeQty(item.id, 1);
+        });
+
+        control.append(minus, qty, plus);
+        row.append(name, price, control);
+        return row;
+      }
+
+      function createEditRow(item) {
+        const row = document.createElement('div');
+        row.className = 'edit-row';
+
+        const nameInput = document.createElement('input');
+        nameInput.className = 'edit-name';
+        nameInput.value = item.name;
+        nameInput.maxLength = 7;
+        nameInput.setAttribute('aria-label', '修改品名');
+        nameInput.addEventListener('change', function () {
+          const next = nameInput.value.trim();
+          if (!next) {
+            nameInput.value = item.name;
+            setStatus('品名不能空白');
+            return;
+          }
+          item.name = next.slice(0, 7);
+          nameInput.value = item.name;
+          autoSave('品名已儲存');
+        });
+
+        const priceInput = document.createElement('input');
+        priceInput.className = 'edit-price';
+        priceInput.value = String(item.price);
+        priceInput.inputMode = 'numeric';
+        priceInput.setAttribute('aria-label', '修改價格');
+        priceInput.addEventListener('change', function () {
+          item.price = clampNumber(priceInput.value, 1, 999, item.price);
+          priceInput.value = String(item.price);
+          autoSave('價格已儲存');
+        });
+
+        const del = document.createElement('button');
+        del.className = 'delete-btn';
+        del.type = 'button';
+        del.textContent = '刪除';
+        del.addEventListener('click', function () {
+          const ok = window.confirm('確定刪除「' + item.name + '」？');
+          if (!ok) return;
+          state.items = state.items.filter(function (x) { return x.id !== item.id; });
+          autoSave('已刪除品項');
+          render();
+        });
+
+        row.append(nameInput, priceInput, del);
+        return row;
+      }
+
+      function changeQty(id, diff) {
+        const item = state.items.find(function (x) { return x.id === id; });
+        if (!item) return;
+        item.qty = Math.max(0, Math.min(99, item.qty + diff));
+        saveState();
+        renderList();
+        renderTotal();
+        setStatus('數量已自動儲存');
+      }
+
+      function renderTotal() {
+        const totalQty = state.items.reduce(function (sum, item) {
+          return sum + item.qty;
+        }, 0);
+        const total = state.items.reduce(function (sum, item) {
+          return sum + item.price * item.qty;
+        }, 0);
+        const selectedItems = state.items.filter(function (item) {
+          return item.qty >= 1;
+        });
+
+        els.totalQty.textContent = String(totalQty);
+        els.totalAmount.textContent = String(total);
+
+        if (selectedItems.length === 0) {
+          els.selectedSummary.textContent = '尚未選擇品項';
+          els.selectedSummary.classList.add('empty');
+          return;
+        }
+
+        els.selectedSummary.textContent = selectedItems.map(function (item) {
+          return item.name + item.qty;
+        }).join('　');
+        els.selectedSummary.classList.remove('empty');
+      }
+
+      function toggleSettingMode() {
+        settingMode = !settingMode;
+        if (!settingMode) manualSave('設定已儲存 ' + timeText());
+        render();
+      }
+
+      function openAddModal() {
+        els.itemMsg.textContent = '';
+        els.newName.value = '';
+        els.newPrice.value = '';
+        els.newQty.value = '0';
+        els.itemModal.classList.add('show');
+        setTimeout(function () { els.newName.focus(); }, 60);
+      }
+
+      function closeAddModal() {
+        els.itemModal.classList.remove('show');
+      }
+
+      function addItem() {
+        const name = els.newName.value.trim();
+        const priceRaw = els.newPrice.value;
+        const qtyRaw = els.newQty.value;
+
+        if (!name) {
+          els.itemMsg.textContent = '請輸入品名';
+          return;
+        }
+        if (name.length > 7) {
+          els.itemMsg.textContent = '品名最多 7 字';
+          return;
+        }
+
+        const price = Number.parseInt(String(priceRaw).replace(/[^0-9]/g, ''), 10);
+        if (!Number.isFinite(price) || price < 1 || price > 999) {
+          els.itemMsg.textContent = '價格請輸入 1～999';
+          return;
+        }
+
+        const qty = clampNumber(qtyRaw, 0, 99, 0);
+        state.items.push({ id: makeId(), name, price, qty });
+        manualSave('已新增並儲存 ' + timeText());
+        closeAddModal();
+      }
+
+      function openShopModal() {
+        els.shopMsg.textContent = '';
+        els.shopNameInput.value = state.storeName || DEFAULT_DATA.storeName;
+        els.shopModal.classList.add('show');
+        setTimeout(function () { els.shopNameInput.focus(); els.shopNameInput.select(); }, 60);
+      }
+
+      function closeShopModal() {
+        els.shopModal.classList.remove('show');
+      }
+
+      function saveShopName() {
+        const next = els.shopNameInput.value.trim();
+        if (!next) {
+          els.shopMsg.textContent = '店名不能空白';
+          return;
+        }
+        state.storeName = next.slice(0, 12);
+        manualSave('店名已儲存 ' + timeText());
+        closeShopModal();
+      }
+
+      function exportMenuBackup() {
+        const backup = {
+          app: 'jiayi-order-app',
+          type: 'menu-items-backup',
+          version: '1.7',
+          exportedAt: new Date().toISOString(),
+          storeName: normalizeStoreName(state.storeName),
+          items: state.items.map(function (item) {
+            return {
+              name: item.name,
+              price: item.price
+            };
+          })
+        };
+        const json = JSON.stringify(backup, null, 2);
+        const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = safeFileName(backup.storeName) + '_品項備份_' + dateStamp() + '.json';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        setStatus('品項備份已下載');
+      }
+
+      function openImportMenuBackup() {
+        els.importFile.value = '';
+        els.importFile.click();
+      }
+
+      function importMenuBackup(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function () {
+          try {
+            const parsed = JSON.parse(String(reader.result || ''));
+            const backup = parseMenuBackup(parsed);
+            if (backup.items.length === 0) {
+              setStatus('備份檔沒有可讀取的品項');
+              window.alert('備份檔沒有可讀取的品項。');
+              return;
+            }
+
+            const ok = window.confirm(
+              '讀取品項備份會覆蓋目前菜單品項與價格，並把所有數量歸零。\n\n確定讀取「' + backup.storeName + '」的 ' + backup.items.length + ' 個品項？'
+            );
+            if (!ok) return;
+
+            state.storeName = backup.storeName;
+            state.items = backup.items.map(function (item) {
+              return {
+                id: makeId(),
+                name: item.name,
+                price: item.price,
+                qty: 0
+              };
+            });
+            state.note = '';
+            manualSave('已讀取品項備份 ' + timeText());
+          } catch (error) {
+            setStatus('備份檔讀取失敗');
+            window.alert('備份檔格式不正確，無法讀取。');
+          }
+        };
+        reader.onerror = function () {
+          setStatus('備份檔讀取失敗');
+          window.alert('備份檔讀取失敗。');
+        };
+        reader.readAsText(file, 'utf-8');
+      }
+
+      function parseMenuBackup(parsed) {
+        if (!parsed || typeof parsed !== 'object') throw new Error('Invalid backup');
+        const rawItems = Array.isArray(parsed.items) ? parsed.items : [];
+        const items = rawItems.map(function (item) {
+          return normalizeItem({
+            id: makeId(),
+            name: item && item.name,
+            price: item && item.price,
+            qty: 0
+          });
+        }).filter(Boolean).map(function (item) {
+          item.qty = 0;
+          return item;
+        });
+
+        return {
+          storeName: normalizeStoreName(parsed.storeName),
+          items: items
+        };
+      }
+
+      function safeFileName(value) {
+        return String(value || '菜單')
+          .replace(/[\\/:*?"<>|\s]+/g, '_')
+          .replace(/^_+|_+$/g, '')
+          .slice(0, 24) || '菜單';
+      }
+
+      function dateStamp() {
+        const now = new Date();
+        const yyyy = String(now.getFullYear());
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mi = String(now.getMinutes()).padStart(2, '0');
+        return yyyy + mm + dd + '_' + hh + mi;
+      }
+
+      function closeResetModal() {
+        els.resetModal.classList.remove('show');
+      }
+
+      function resetAllQty() {
+        state.items.forEach(function (item) { item.qty = 0; });
+        state.note = '';
+        manualSave('已歸零 ' + timeText());
+        closeResetModal();
+      }
+    })();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./service-worker.js').catch(function () {});
+      });
+    }
+  </script>
+</body>
+</html>
